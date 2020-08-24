@@ -1,0 +1,27 @@
+[
+    {
+        "orderID": "a82bddcb-a709-4702-4fc0-e1b9445b87d2",
+        "customerID": 1,
+        "amount": 182
+    },
+    {
+        "orderID": "fad10a9b-317a-7b29-5ce4-e7ca73a1c16c",
+        "customerID": 2,
+        "amount": 33
+    },
+    {
+        "orderID": "e8e20e6d-31fe-3575-399c-18d4faf1d1ce",
+        "customerID": 3,
+        "amount": 170
+    },
+    {
+        "orderID": "73995190-a934-a89a-8510-e0089037fd30",
+        "customerID": 4,
+        "amount": 170
+    },
+    {
+        "orderID": "9486373e-5095-89f0-b088-0c5eed038904",
+        "customerID": 5,
+        "amount": 470
+    }
+]
