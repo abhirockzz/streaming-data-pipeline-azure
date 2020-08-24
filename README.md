@@ -32,6 +32,14 @@ This section will cover the following:
 - Create Azure Cosmos account and container
 - Create and configure Azure Stream Analytics Job, Input source, Reference data and Output source
 
+Before we setup the services, create a Resource Group - you can use the [Azure Portal](https://docs.microsoft.com/azure/azure-resource-manager/management/manage-resource-groups-portal?WT.mc_id=devto-blog-abhishgu#create-resource-groups) or Azure CLI ([az group create](https://docs.microsoft.com/cli/azure/group?view=azure-cli-latest&WT.mc_id=devto-blog-abhishgu#az-group-create) command)
+
+```azurecli
+az group create -l <location> -n <name of resource group>
+```
+
+> Create the rest of the services in the same resource group and location
+
 ### Azure Event Hubs
 
 Create an [Event Hubs Namespace](https://docs.microsoft.com/azure/event-hubs/event-hubs-features?WT.mc_id=devto-blog-abhishgu#namespace) and Hub (topic) - the topic that you create (you can name it `orders`) will be used by Azure Stream Analytics as a (streaming) "source" for raw orders data. This is JSON data in this format:
@@ -239,3 +247,19 @@ GROUP BY c.city
 Here is a screenshot:
 
 ![](images/output-cosmos-2.png)
+
+### Clean up
+
+Once you're done, you can delete all the services by simply deleting the resource group ([az group delete](https://docs.microsoft.com/cli/azure/group?view=azure-cli-latest&WT.mc_id=devto-blog-abhishgu#az-group-delete))
+
+```azurecli
+az group delete -n <name of resource group>
+```
+
+## Wrap-up
+
+I hope this helps you get started with Azure Stream Analytics and test the waters before moving on to more involved use cases. In addition to this, there is plenty of material for you to dig in!
+
+- [Explore Architecture patterns](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-solution-patterns?WT.mc_id=devto-blog-abhishgu)
+- Reference solutions such as [Twitter sentiment analysis](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-twitter-sentiment-analysis-trends?WT.mc_id=devto-blog-abhishgu), fraud detection, IoT data processing etc.
+- [Common query patterns in Azure Stream Analytics](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-stream-analytics-query-patterns?WT.mc_id=devto-blog-abhishgu)
