@@ -1,6 +1,6 @@
 # Streaming data enrichment pipeline on Azure
 
-This tutorial with walk you through how to build a streaming data enrichment pipeline on Azure. Please refer to this blog post for additional background.
+This tutorial with walk you through how to build a streaming data enrichment pipeline on Azure. Please refer to [this blog post](https://dev.to/abhirockzz/tutorial-build-a-pipeline-to-join-streams-of-real-time-data-2bm2) for additional background.
 
 **Components**
 
