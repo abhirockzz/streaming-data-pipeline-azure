@@ -4,16 +4,16 @@ This tutorial with walk you through how to build a streaming data enrichment pip
 
 **Components**
 
-- [Azure Event Hubs](https://docs.microsoft.com/azure/event-hubs/event-hubs-about?WT.mc_id=devto-blog-abhishgu) (Input Data source) - ingests raw orders data
-- [Azure SQL Database](https://docs.microsoft.com/azure/azure-sql/database/sql-database-paas-overview?WT.mc_id=devto-blog-abhishgu) (Reference Data source) - stores reference customer data
-- [Azure Stream Analytics](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-introduction?WT.mc_id=devto-blog-abhishgu) (Stream Processing) - joins the stream of orders data from Azure Event Hubs with the static reference customers data
-- [Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/introduction?WT.mc_id=devto-blog-abhishgu) (Output data source) - acts as a "sink" to store enriched orders info
+- [Azure Event Hubs](https://docs.microsoft.com/azure/event-hubs/event-hubs-about?WT.mc_id=data-0000-abhishgu) (Input Data source) - ingests raw orders data
+- [Azure SQL Database](https://docs.microsoft.com/azure/azure-sql/database/sql-database-paas-overview?WT.mc_id=data-0000-abhishgu) (Reference Data source) - stores reference customer data
+- [Azure Stream Analytics](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-introduction?WT.mc_id=data-0000-abhishgu) (Stream Processing) - joins the stream of orders data from Azure Event Hubs with the static reference customers data
+- [Azure Cosmos DB](https://docs.microsoft.com/azure/cosmos-db/introduction?WT.mc_id=data-0000-abhishgu) (Output data source) - acts as a "sink" to store enriched orders info
 
 ![](images/diagram.jpg)
 
 ## Pre-requisites
 
-- [Microsoft Azure account](https://docs.microsoft.com/azure/?WT.mc_id=devto-blog-abhishgu) - go ahead and [sign up for a free one!](https://azure.microsoft.com/free/?WT.mc_id=devto-blog-abhishgu)
+- [Microsoft Azure account](https://docs.microsoft.com/azure/?WT.mc_id=data-0000-abhishgu) - go ahead and [sign up for a free one!](https://azure.microsoft.com/free/?WT.mc_id=data-0000-abhishgu)
 - [Docker](https://docs.docker.com/get-docker/) - this will be used to run orders generator application
 - Clone the project
 
@@ -32,7 +32,7 @@ This section will cover the following:
 - Create Azure Cosmos account and container
 - Create and configure Azure Stream Analytics Job, Input source, Reference data and Output source
 
-Before we setup the services, create a Resource Group - you can use the [Azure Portal](https://docs.microsoft.com/azure/azure-resource-manager/management/manage-resource-groups-portal?WT.mc_id=devto-blog-abhishgu#create-resource-groups) or Azure CLI ([az group create](https://docs.microsoft.com/cli/azure/group?view=azure-cli-latest&WT.mc_id=devto-blog-abhishgu#az-group-create) command)
+Before we setup the services, create a Resource Group - you can use the [Azure Portal](https://docs.microsoft.com/azure/azure-resource-manager/management/manage-resource-groups-portal?WT.mc_id=data-0000-abhishgu#create-resource-groups) or Azure CLI ([az group create](https://docs.microsoft.com/cli/azure/group?view=azure-cli-latest&WT.mc_id=data-0000-abhishgu#az-group-create) command)
 
 ```azurecli
 az group create -l <location> -n <name of resource group>
@@ -42,7 +42,7 @@ az group create -l <location> -n <name of resource group>
 
 ### Azure Event Hubs
 
-Create an [Event Hubs Namespace](https://docs.microsoft.com/azure/event-hubs/event-hubs-features?WT.mc_id=devto-blog-abhishgu#namespace) and Hub (topic) - the topic that you create (you can name it `orders`) will be used by Azure Stream Analytics as a (streaming) "source" for raw orders data. This is JSON data in this format:
+Create an [Event Hubs Namespace](https://docs.microsoft.com/azure/event-hubs/event-hubs-features?WT.mc_id=data-0000-abhishgu#namespace) and Hub (topic) - the topic that you create (you can name it `orders`) will be used by Azure Stream Analytics as a (streaming) "source" for raw orders data. This is JSON data in this format:
 
 ```json
 {
@@ -52,7 +52,7 @@ Create an [Event Hubs Namespace](https://docs.microsoft.com/azure/event-hubs/eve
 }
 ```
 
-You can setup Event Hubs using either of these options: [Azure Portal](https://docs.microsoft.com/azure/event-hubs/event-hubs-create?WT.mc_id=devto-blog-abhishgu), [Azure CLI](https://docs.microsoft.com/azure/event-hubs/event-hubs-quickstart-cli?WT.mc_id=devto-blog-abhishgu), [ARM template](https://docs.microsoft.com/azure/event-hubs/event-hubs-resource-manager-namespace-event-hub?WT.mc_id=devto-blog-abhishgu) or [Azure PowerShell](https://docs.microsoft.com/azure/event-hubs/event-hubs-quickstart-powershell?WT.mc_id=devto-blog-abhishgu)
+You can setup Event Hubs using either of these options: [Azure Portal](https://docs.microsoft.com/azure/event-hubs/event-hubs-create?WT.mc_id=data-0000-abhishgu), [Azure CLI](https://docs.microsoft.com/azure/event-hubs/event-hubs-quickstart-cli?WT.mc_id=data-0000-abhishgu), [ARM template](https://docs.microsoft.com/azure/event-hubs/event-hubs-resource-manager-namespace-event-hub?WT.mc_id=data-0000-abhishgu) or [Azure PowerShell](https://docs.microsoft.com/azure/event-hubs/event-hubs-quickstart-powershell?WT.mc_id=data-0000-abhishgu)
 
 ### Azure SQL Database
 
@@ -68,7 +68,7 @@ SQL Server is used as the reference data store. It contains customer information
     5           Gerardo Dorsey                    Dallas              
 ```
 
-You can [follow these steps](https://docs.microsoft.com/azure/azure-sql/database/single-database-create-quickstart?tabs=azure-portal&WT.mc_id=devto-blog-abhishgu#create-a-single-database) to create a logical SQL server and a single database - use `customers` as the database name
+You can [follow these steps](https://docs.microsoft.com/azure/azure-sql/database/single-database-create-quickstart?tabs=azure-portal&WT.mc_id=data-0000-abhishgu#create-a-single-database) to create a logical SQL server and a single database - use `customers` as the database name
 
 Once completed, you should have a SQL server...
 
@@ -78,7 +78,7 @@ Once completed, you should have a SQL server...
 
 ![](images/sqlserver-db.png)
 
-Go ahead, create a table in the database and import sample data (10000 rows from [`customers.csv`](https://github.com/abhirockzz/streaming-data-pipeline-azure/blob/master/customers.csv)). I have used [`sqlcmd` and `bcp`](https://docs.microsoft.com/azure/azure-sql/load-from-csv-with-bcp?WT.mc_id=devto-blog-abhishgu) (CLI tools for SQL Server) in the example below:
+Go ahead, create a table in the database and import sample data (10000 rows from [`customers.csv`](https://github.com/abhirockzz/streaming-data-pipeline-azure/blob/master/customers.csv)). I have used [`sqlcmd` and `bcp`](https://docs.microsoft.com/azure/azure-sql/load-from-csv-with-bcp?WT.mc_id=data-0000-abhishgu) (CLI tools for SQL Server) in the example below:
 
 > If you want to use the Azure Portal to upload data, (skip this and) check the next step
 
@@ -100,7 +100,7 @@ To confirm that the data has been imported:
 sqlcmd -S <sql server name>.database.windows.net -U <admin username -P <admin password> -d <database name> -Q "SELECT TOP 10 * FROM Crm.Customers;"
 ```
 
-You can also use the [Query editor in the portal](https://docs.microsoft.com/azure/azure-sql/database/single-database-create-quickstart?tabs=azure-portal&WT.mc_id=devto-blog-abhishgu#query-the-database). Simply paste the contents of [`customers.sql`](https://github.com/abhirockzz/streaming-data-pipeline-azure/blob/master/customers.sql)) file into the editor and click **Run**
+You can also use the [Query editor in the portal](https://docs.microsoft.com/azure/azure-sql/database/single-database-create-quickstart?tabs=azure-portal&WT.mc_id=data-0000-abhishgu#query-the-database). Simply paste the contents of [`customers.sql`](https://github.com/abhirockzz/streaming-data-pipeline-azure/blob/master/customers.sql)) file into the editor and click **Run**
 
 ![](images/import-data.png)
 
@@ -124,7 +124,7 @@ We will use Azure Cosmos DB to store the "enriched" data has customer informatio
 }
 ```
 
-You can use the Azure Portal to [create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/create-cosmosdb-resources-portal?WT.mc_id=devto-blog-abhishgu#create-an-azure-cosmos-db-account). Once that's complete, go ahead and [add a database and container](https://docs.microsoft.com/azure/cosmos-db/create-cosmosdb-resources-portal?WT.mc_id=devto-blog-abhishgu#add-a-database-and-a-container)
+You can use the Azure Portal to [create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/create-cosmosdb-resources-portal?WT.mc_id=data-0000-abhishgu#create-an-azure-cosmos-db-account). Once that's complete, go ahead and [add a database and container](https://docs.microsoft.com/azure/cosmos-db/create-cosmosdb-resources-portal?WT.mc_id=data-0000-abhishgu#add-a-database-and-a-container)
 
 > use `/customer_id` as the partition key for your container
 
@@ -134,17 +134,17 @@ You can use the Azure Portal to [create an Azure Cosmos DB account](https://docs
 
 Finally, it's time to setup Azure Stream Analytics. It will stitch together all the components to create and end to end solution.
 
-Start by creating an Azure Stream Analytics job. If you want to use the Azure Portal, just follow the [steps outlined in this section](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-quick-create-portal?WT.mc_id=devto-blog-abhishgu#create-a-stream-analytics-job) or use the [Azure CLI instead](https://docs.microsoft.com/azure/stream-analytics/quick-create-azure-cli?WT.mc_id=devto-blog-abhishgu#create-a-stream-analytics-job) if you don't prefer clicking on a UI.
+Start by creating an Azure Stream Analytics job. If you want to use the Azure Portal, just follow the [steps outlined in this section](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-quick-create-portal?WT.mc_id=data-0000-abhishgu#create-a-stream-analytics-job) or use the [Azure CLI instead](https://docs.microsoft.com/azure/stream-analytics/quick-create-azure-cli?WT.mc_id=data-0000-abhishgu#create-a-stream-analytics-job) if you don't prefer clicking on a UI.
 
 **Create Azure Event Hubs Input**
 
-To configure the [Azure Event Hubs as a Streaming Input source](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-define-inputs?WT.mc_id=devto-blog-abhishgu#stream-data-from-event-hubs), open the Job in the portal, choose **Input**
+To configure the [Azure Event Hubs as a Streaming Input source](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-define-inputs?WT.mc_id=data-0000-abhishgu#stream-data-from-event-hubs), open the Job in the portal, choose **Input**
 
 ![](images/asa-eh.png)
 
 **Create Azure SQL Reference Input**
 
-[To configure the Azure SQL Database as a Reference Input source](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-use-reference-data?WT.mc_id=devto-blog-abhishgu#configure-sql-database-reference), open the Job in the portal, choose **Input** > **Add reference Input** > **SQL Database**
+[To configure the Azure SQL Database as a Reference Input source](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-use-reference-data?WT.mc_id=data-0000-abhishgu#configure-sql-database-reference), open the Job in the portal, choose **Input** > **Add reference Input** > **SQL Database**
 
 ![](images/asa-sql-1.png)
 
@@ -154,7 +154,7 @@ Choose the SQL database you created previously:
 
 **Create Azure Cosmos DB Output**
 
-[To configure Azure Cosmos DB as an Output](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-documentdb-output?WT.mc_id=devto-blog-abhishgu), choose **Output** and proceed as below:
+[To configure Azure Cosmos DB as an Output](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-documentdb-output?WT.mc_id=data-0000-abhishgu), choose **Output** and proceed as below:
 
 ![](images/asa-cosmosdb.png)
 
@@ -250,7 +250,7 @@ Here is a screenshot:
 
 ### Clean up
 
-Once you're done, you can delete all the services by simply deleting the resource group ([az group delete](https://docs.microsoft.com/cli/azure/group?view=azure-cli-latest&WT.mc_id=devto-blog-abhishgu#az-group-delete))
+Once you're done, you can delete all the services by simply deleting the resource group ([az group delete](https://docs.microsoft.com/cli/azure/group?view=azure-cli-latest&WT.mc_id=data-0000-abhishgu#az-group-delete))
 
 ```azurecli
 az group delete -n <name of resource group>
@@ -260,6 +260,6 @@ az group delete -n <name of resource group>
 
 I hope this helps you get started with Azure Stream Analytics and test the waters before moving on to more involved use cases. In addition to this, there is plenty of material for you to dig in!
 
-- [Explore Architecture patterns](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-solution-patterns?WT.mc_id=devto-blog-abhishgu)
-- Reference solutions such as [Twitter sentiment analysis](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-twitter-sentiment-analysis-trends?WT.mc_id=devto-blog-abhishgu), fraud detection, IoT data processing etc.
-- [Common query patterns in Azure Stream Analytics](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-stream-analytics-query-patterns?WT.mc_id=devto-blog-abhishgu)
+- [Explore Architecture patterns](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-solution-patterns?WT.mc_id=data-0000-abhishgu)
+- Reference solutions such as [Twitter sentiment analysis](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-twitter-sentiment-analysis-trends?WT.mc_id=data-0000-abhishgu), fraud detection, IoT data processing etc.
+- [Common query patterns in Azure Stream Analytics](https://docs.microsoft.com/azure/stream-analytics/stream-analytics-stream-analytics-query-patterns?WT.mc_id=data-0000-abhishgu)
